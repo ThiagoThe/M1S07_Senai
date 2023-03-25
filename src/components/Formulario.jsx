@@ -1,84 +1,69 @@
-import GrupoInput from './grupoInput';
-import { useState } from 'react';
-import moment from 'moment';
+import PropTypes from "prop-types";
 
-function Formulario({quandoAdicionar}) {
-    const [data, setData] = useState('');
-    const [quantidade, setQuantidade] = useState(0);
-    const [valor, setValor] = useState(0);
+import { useState } from "react";
+import { GrupoInput } from "./GrupoInput";
 
-    function criaNegociacao( {
-        if (data === '' || quantidade === 0 || valor === 0) {
-            alert ("Erro ao criar a negociação. Verifique se todos os campos foram preenchidos.");
-        } else {
-            const negociacao = {
-                dataNegociacao: moment(data, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-                quantidadeNegociacao: quantidade,
-                valorNegociacao: valor
-            };
-            quandoAdicionar(negociacao);
+export const Formulario = (props) => {
+  const [data, setData] = useState("");
+  const [valor, setValor] = useState(0);
+  const [quantidade, setQuantidade] = useState(0);
 
-            console.log(negociacao: ${JSON.stringify(negociacao)});
-            setData("");
-            setQuantidade(0);
-            setValor(0);
-        }
-    }
-    return (
-        <div className = "py-5">
-            <form className='form conatainer form'>
-            <div className="row justify-content-around">
-            <div className="form-group col">
-              <GrupoInput
-                etiqueta="Data"
-                htmlFor="data"
-                tipo="date"
-                min={1}
-                step={1}
-                id="data"
-                valor={data}
-                aoDigitar={(event) => setData(event.target.value)}
-              />
-            </div>
-            <div className="form-group col">
-              <GrupoInput
-                etiqueta="Quantidade"
-                htmlFor="quantidade"
-                tipo="number"
-                min={1}
-                step={1}
-                id="quantidade"
-                valor={quantidade}
-                aoDigitar={(event) => setQuantidade(event.target.valueAsNumber)}
-              />
-            </div>
-  
-            <div className="form-group col">
-              <GrupoInput
-                etiqueta="Valor"
-                htmlFor="valor"
-                tipo="number"
-                min={0.01}
-                step={0.01}
-                id="valor"
-                valor={valor}
-                aoDigitar={(event) => setValor(event.target.valueAsNumber)}
-              />
-            </div>
-  
-            <div className="col-1 d-flex align-items-end justify-content-end">
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={criaNegociacao}
-              >
-                Incluir
-              </button>
-            </div>
-          </div>
-            </form>
+  function handleAdicionarNegociacao() {
+    const negociacao = {
+      data: data,
+      quantidade: quantidade,
+      valor: valor,
+    };
+    props.quandoAdicionar(negociacao);
+
+    // resetar os campos após a inserção
+    setData("");
+    setQuantidade(0);
+    setValor(0);
+  }
+
+  return (
+    <form className="form container">
+      <div className="row">
+        <GrupoInput
+          id="data"
+          etiqueta="Data"
+          tipo="text"
+          aoDigitar={(e) => setData(e.target.value)}
+          valor={data}
+        />
+        <GrupoInput
+          id="quantidade"
+          etiqueta="Quantidade"
+          tipo="number"
+          aoDigitar={(e) => setQuantidade(e.target.value)}
+          valor={quantidade}
+          min="1"
+          step="1"
+        />
+        <GrupoInput
+          id="valor"
+          etiqueta="Valor"
+          tipo="number"
+          aoDigitar={(e) => setValor(e.target.value)}
+          valor={valor}
+          min="0.01"
+          step="0.01"
+        />
+        <div className="col-1 d-flex align-items-end justify-content-end">
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={handleAdicionarNegociacao}
+          >
+            Incluir
+          </button>
         </div>
-    )
-}
+      </div>
+    </form>
+  );
+};
 
-export default Formulario;
+Formulario.propTypes = {
+  quandoAdicionar: PropTypes.func.isRequired,
+};

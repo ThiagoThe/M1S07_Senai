@@ -1,32 +1,31 @@
 import PropTypes from "prop-types";
 
-const GrupoInput = (props) => {
+export const GrupoInput = (props) => {
+  const { tipo, etiqueta, id, min, step, valor, aoDigitar } = props;
+
   return (
-    <div className={"form-group"}>
-      <label htmlFor={props.htmlFor} className={"form-label"}>
-        {props.etiqueta}
-      </label>
+    <div class="form-group col">
+      <label htmlFor={id}>{etiqueta}</label>
       <input
-        type={props.tipo}
-        min={props.minimo}
-        step={props.step}
-        id={props.id}
-        className={"form-control"}
-        value={props.valor}
+        type={tipo}
+        id={id}
+        class="form-control"
         required
-        onChange={props.aoDigitar}
+        min={min}
+        step={step}
+        value={valor}
+        onChange={aoDigitar}
       />
     </div>
   );
 };
 
 GrupoInput.propTypes = {
-  id: PropTypes.string.isRequired,
-  etiqueta: PropTypes.string.isRequired,
   tipo: PropTypes.string.isRequired,
-  minimo: PropTypes.number,
+  etiqueta: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  min: PropTypes.number,
   step: PropTypes.number,
+  valor: PropTypes.string.isRequired,
   aoDigitar: PropTypes.func.isRequired,
 };
-
-export default GrupoInput;
